@@ -1,0 +1,10 @@
+# !/bin/bash
+echo "tear down proxy"
+terraform apply -destroy -auto-approve
+IFS=$'\n'
+for svc in `networksetup -listallnetworkservices`; do
+    if [[ $svc != *"a network service is disabled"* ]];then
+        networksetup -setsocksfirewallproxystate ${svc} off
+    fi
+done
+ps ax|grep 'socket_to_http/socks2http'|grep -v grep|awk '{print $1}'|xargs kill
