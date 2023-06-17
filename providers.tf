@@ -3,7 +3,9 @@
 provider "alicloud" {
 #   access_key = "xxxxxx"
 #   secret_key = "xxxxxx"
-  region = "ap-northeast-1"
+  region = "us-east-1"
+  #region = "us-west-1"
+  #region = "ap-northeast-1"
   #region = "cn-beijing"
 }
 
