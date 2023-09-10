@@ -3,9 +3,9 @@
 provider "alicloud" {
 #   access_key = "xxxxxx"
 #   secret_key = "xxxxxx"
-  region = "us-east-1"
+  #region = "us-east-1"
   #region = "us-west-1"
-  #region = "ap-northeast-1"
+  region = "ap-northeast-1"
   #region = "cn-beijing"
 }
 
@@ -50,8 +50,8 @@ resource "alicloud_vswitch" "vsw" {
 }
 
 data "alicloud_images" "default" {
-  name_regex  = "^ubuntu_20.*"
-  most_recent = true
+  name_regex  = "^centos.*"
+  most_recent = false
   owners      = "system"
 }
 
