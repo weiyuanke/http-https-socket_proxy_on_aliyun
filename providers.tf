@@ -50,8 +50,8 @@ resource "alicloud_vswitch" "vsw" {
 }
 
 data "alicloud_images" "default" {
-  name_regex  = "^centos.*"
-  most_recent = false
+  name_regex  = "^ubuntu_20.*"
+  most_recent = true
   owners      = "system"
 }
 
