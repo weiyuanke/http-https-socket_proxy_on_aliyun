@@ -35,8 +35,8 @@ data "alicloud_zones" "default" {
 
 data "alicloud_instance_types" "type" {
   availability_zone = data.alicloud_zones.default.zones[0].id
-  cpu_core_count    = 2
-  memory_size       = 4
+  cpu_core_count    = 1
+  memory_size       = 0.5
 }
 
 resource "alicloud_vswitch" "vsw" {
@@ -65,6 +65,19 @@ resource "alicloud_instance" "instance" {
   system_disk_performance_level = "PL0"
   internet_max_bandwidth_out = 5
 
+  connection {
+      type     = "ssh"
+      user     = "root"
+      password = "Admin123"
+      host = self.public_ip
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get update",
+      "sudo apt-get install -y iftop",
+    ]
+  }
   provisioner "local-exec" {
     when    = destroy
     command = "./config_script/des_command.sh"
