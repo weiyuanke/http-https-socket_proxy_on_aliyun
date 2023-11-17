@@ -4,7 +4,8 @@
 
 目前只支持macos操作系统；
 
-
+export ALICLOUD_ACCESS_KEY="<你的阿里云AK>"
+export ALICLOUD_SECRET_KEY="<你的阿里云SK>"
 
 安装：
 ./install.sh

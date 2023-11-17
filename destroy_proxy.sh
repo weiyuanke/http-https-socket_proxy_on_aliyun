@@ -1,4 +1,6 @@
 # !/bin/bash
+CurDir=$(readlink -f $(dirname $0))
+cd $CurDir
 echo "tear down proxy"
 IFS=$'\n'
 for svc in `networksetup -listallnetworkservices`; do

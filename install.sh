@@ -1,5 +1,8 @@
 # !/bin/bash
 
+CurDir=$(readlink -f $(dirname $0))
+cd $CurDir
+
 # install brew
 /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
 

@@ -37,6 +37,8 @@ data "alicloud_instance_types" "type" {
   availability_zone = data.alicloud_zones.default.zones[0].id
   cpu_core_count    = 1
   memory_size       = 0.5
+  #cpu_core_count    = 4
+  #memory_size       = 8
 }
 
 resource "alicloud_vswitch" "vsw" {
