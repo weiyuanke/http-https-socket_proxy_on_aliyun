@@ -67,7 +67,7 @@ resource "alicloud_instance" "instance" {
   system_disk_size 	= 40
   password 		= "Admin123"
   system_disk_performance_level = "PL0"
-  internet_max_bandwidth_out = 5
+  internet_max_bandwidth_out = 50
 
   connection {
       type     = "ssh"

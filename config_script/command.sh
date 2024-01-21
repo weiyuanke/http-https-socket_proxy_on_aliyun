@@ -9,4 +9,4 @@ for svc in `networksetup -listallnetworkservices`; do
         networksetup -setsocksfirewallproxy ${svc} 127.0.0.1 9002
     fi
 done
-sshpass -p Admin123 ssh -o StrictHostKeyChecking=no -D 9002 root@${PubIP} iftop -t
+sshpass -p Admin123 ssh -o StrictHostKeyChecking=no -D 9002 root@${PubIP} iftop -t -n
