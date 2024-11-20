@@ -50,7 +50,7 @@ resource "alicloud_vswitch" "vsw" {
 }
 
 data "alicloud_images" "default" {
-  name_regex  = "^ubuntu_20.*"
+  name_regex  = "^ubuntu_18.*"
   most_recent = true
   owners      = "system"
 }
@@ -79,7 +79,7 @@ resource "alicloud_instance" "instance" {
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update",
-      "sudo apt-get install -y iftop docker.io",
+      "sudo apt-get install -y iftop docker.io openssl libssl-dev",
     ]
   }
   provisioner "local-exec" {

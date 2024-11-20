@@ -1,4 +1,5 @@
 echo "start configuring proxy"
+echo "IP: ${PubIP}"
 rm -f ${HOME}/.ssh/known_hosts;
 
 if [[ "$OSTYPE" =~ ^darwin ]];then
