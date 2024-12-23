@@ -80,7 +80,6 @@ resource "alicloud_instance" "instance" {
     inline = [
       "sudo apt-get update",
       "sudo apt-get install -y iftop docker.io openssl libssl-dev golang",
-      "pip install shadowsocks",
     ]
   }
   provisioner "local-exec" {
