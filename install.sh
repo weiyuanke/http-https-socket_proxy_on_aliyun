@@ -1,17 +1,29 @@
 # !/bin/bash
 
+set -e
+set -o pipefail
+
 CurDir=$(readlink -f $(dirname $0))
 cd $CurDir
 
 if [[ "$OSTYPE" =~ ^darwin ]];then
   # install brew
-  /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
+  if ! command -v brew &> /dev/null
+  then
+    echo "brew未安装，正在尝试安装..."
+    /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
+  fi
 
   # install sshpass
-  brew tap esolitos/ipa
-  brew install esolitos/ipa/sshpass
+  if ! command -v sshpass &> /dev/null
+  then
+    echo "安装sshpass"
+    brew tap esolitos/ipa
+    brew install esolitos/ipa/sshpass
+  fi
   
   # install terraform
+  echo "brew install terraform"
   brew install terraform
 fi
 
@@ -23,4 +35,5 @@ if [[ "$OSTYPE" =~ ^linux ]];then
 fi
 
 # init
+echo "terraform init"
 terraform init
