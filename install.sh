@@ -3,7 +3,7 @@
 set -e
 set -o pipefail
 
-CurDir=$(readlink -f $(dirname $0))
+CurDir=$(dirname $0)
 cd $CurDir
 
 if [[ "$OSTYPE" =~ ^darwin ]];then
@@ -23,8 +23,11 @@ if [[ "$OSTYPE" =~ ^darwin ]];then
   fi
   
   # install terraform
-  echo "brew install terraform"
-  brew install terraform
+  if ! command -v terraform &> /dev/null
+  then
+    echo "brew install terraform"
+    brew install terraform
+  fi
 fi
 
 if [[ "$OSTYPE" =~ ^linux ]];then

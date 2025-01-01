@@ -1,5 +1,5 @@
 # !/bin/bash
-CurDir=$(readlink -f $(dirname $0))
+CurDir=$(dirname $0)
 cd $CurDir
 echo "tear down proxy"
 
