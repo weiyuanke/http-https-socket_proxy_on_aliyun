@@ -31,14 +31,15 @@ resource "alicloud_security_group_rule" "allow_all_tcp" {
 }
 
 data "alicloud_zones" "default" {
-  available_disk_category     = "cloud_efficiency"
   available_resource_creation = "VSwitch"
 }
 
 data "alicloud_instance_types" "type" {
   availability_zone = data.alicloud_zones.default.zones[0].id
-  cpu_core_count    = 1
-  memory_size       = 0.5
+  sorted_by         = "Price"
+  is_outdated       = false
+  cpu_core_count    = 2
+  memory_size       = 2
   #cpu_core_count    = 4
   #memory_size       = 8
 }
@@ -62,12 +63,14 @@ resource "alicloud_instance" "instance" {
   instance_type         = data.alicloud_instance_types.type.instance_types.0.id
   image_id             	= data.alicloud_images.default.images[0].id
   instance_charge_type 	= "PostPaid"
-  internet_charge_type 	= "PayByTraffic"
+  internet_charge_type 	= "PayByBandwidth" # PayByBandwidth / PayByTraffic
   instance_name        	= "terraform_test_ecs"
   system_disk_size 	= 40
   password 		= "Admin123"
   system_disk_performance_level = "PL0"
-  internet_max_bandwidth_out = 50
+  spot_strategy         = "SpotAsPriceGo"
+  system_disk_category  = "cloud_auto"
+  internet_max_bandwidth_out = 1
 
   connection {
       type     = "ssh"
