@@ -1,12 +1,9 @@
 # https://help.aliyun.com/document_detail/40654.html#section-jn7-0pl-ra9
 # https://infrastructure.aliyun.com/?spm=a2c4g.11186623.0.0.5a381017VhCLUU
+# export ALICLOUD_ACCESS_KEY=xxxxx
+# export ALICLOUD_SECRET_KEY=xxxxx
 provider "alicloud" {
-#   access_key = "xxxxxx"
-#   secret_key = "xxxxxx"
-  #region = "us-east-1"
-  #region = "us-west-1"
-  region = "ap-northeast-1"
-  #region = "cn-beijing"
+  region = "ap-northeast-1" # cn-beijing / us-east-1 / us-west-1 / ap-northeast-1
 }
 
 resource "alicloud_vpc" "vpc" {
@@ -15,7 +12,7 @@ resource "alicloud_vpc" "vpc" {
 }
 
 resource "alicloud_security_group" "default" {
-  name = "default"
+  name   = "default"
   vpc_id = alicloud_vpc.vpc.id
 }
 
@@ -40,8 +37,6 @@ data "alicloud_instance_types" "type" {
   is_outdated       = false
   cpu_core_count    = 2
   memory_size       = 2
-  #cpu_core_count    = 4
-  #memory_size       = 8
 }
 
 resource "alicloud_vswitch" "vsw" {
