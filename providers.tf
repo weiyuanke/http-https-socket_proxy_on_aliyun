@@ -81,10 +81,6 @@ resource "alicloud_instance" "instance" {
     ]
   }
   provisioner "local-exec" {
-    when    = destroy
-    command = "./config_script/des_command.sh"
-  }
-  provisioner "local-exec" {
     command = "./config_script/command.sh"
     environment = {
       PubIP = self.public_ip
