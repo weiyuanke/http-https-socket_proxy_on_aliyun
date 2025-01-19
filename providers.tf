@@ -65,7 +65,7 @@ resource "alicloud_instance" "instance" {
   system_disk_performance_level = "PL0"
   spot_strategy         = "SpotAsPriceGo"
   system_disk_category  = "cloud_auto"
-  internet_max_bandwidth_out = 1
+  internet_max_bandwidth_out = 2
 
   connection {
       type     = "ssh"
