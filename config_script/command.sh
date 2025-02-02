@@ -2,6 +2,9 @@ echo "start configuring proxy"
 echo "Public IP: ${PubIP}"
 echo "export HTTP_PROXY=socks5h://127.0.0.1:9002 HTTPS_PROXY=socks5h://127.0.0.1:9002"
 echo "export HTTP_PROXY=http://127.0.0.1:8080 HTTPS_PROXY=http://127.0.0.1:8080"
+echo ""
+echo ""
+echo ""
 sleep 20
 rm -f ${HOME}/.ssh/known_hosts;
 
