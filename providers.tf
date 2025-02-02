@@ -77,7 +77,7 @@ resource "alicloud_instance" "instance" {
   provisioner "remote-exec" {
     inline = [
       "sudo apt-get update",
-      "sudo apt-get install -y iftop docker.io",
+      "sudo apt-get install -y iftop", # docker.io
     ]
   }
   provisioner "local-exec" {
@@ -92,6 +92,3 @@ output "public_ip" {
   value = alicloud_instance.instance.public_ip
 }
 
-output "private_ip" {
-  value = alicloud_instance.instance.private_ip
-}
