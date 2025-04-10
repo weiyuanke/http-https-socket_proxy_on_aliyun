@@ -35,8 +35,7 @@ data "alicloud_instance_types" "type" {
   availability_zone = data.alicloud_zones.default.zones[0].id
   sorted_by         = "Price"
   is_outdated       = false
-  cpu_core_count    = 2
-  memory_size       = 2
+  cpu_core_count    = 1
 }
 
 resource "alicloud_vswitch" "vsw" {
@@ -46,7 +45,7 @@ resource "alicloud_vswitch" "vsw" {
 }
 
 data "alicloud_images" "default" {
-  name_regex  = "^ubuntu_18.*"
+  name_regex  = "^ubuntu_20.*"
   most_recent = true
   owners      = "system"
 }
@@ -65,7 +64,7 @@ resource "alicloud_instance" "instance" {
   system_disk_performance_level = "PL0"
   spot_strategy         = "SpotAsPriceGo"
   system_disk_category  = "cloud_auto"
-  internet_max_bandwidth_out = 3
+  internet_max_bandwidth_out = 2
 
   connection {
       type     = "ssh"
