@@ -5,7 +5,7 @@ echo "export HTTP_PROXY=http://127.0.0.1:8080 HTTPS_PROXY=http://127.0.0.1:8080"
 echo ""
 echo ""
 echo ""
-sleep 20
+sleep 10
 rm -f ${HOME}/.ssh/known_hosts;
 
 if [[ "$OSTYPE" =~ ^darwin ]];then
