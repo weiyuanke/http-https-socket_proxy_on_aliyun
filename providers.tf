@@ -34,6 +34,7 @@ data "alicloud_zones" "default" {
 data "alicloud_instance_types" "type" {
   availability_zone = data.alicloud_zones.default.zones[0].id
   sorted_by         = "Price"
+  instance_type_family = "ecs.g8y"
   is_outdated       = false
   cpu_core_count    = 1
 }
@@ -45,7 +46,7 @@ resource "alicloud_vswitch" "vsw" {
 }
 
 data "alicloud_images" "default" {
-  name_regex  = "^ubuntu_20.*"
+  name_regex  = "^ubuntu_.*"
   most_recent = true
   owners      = "system"
 }
