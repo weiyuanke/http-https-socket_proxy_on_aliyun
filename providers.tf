@@ -34,7 +34,7 @@ data "alicloud_zones" "default" {
 data "alicloud_instance_types" "type" {
   availability_zone = data.alicloud_zones.default.zones[0].id
   sorted_by         = "Price"
-  instance_type_family = "ecs.g8y"
+  instance_type_family = "ecs.c8y"
   is_outdated       = false
   cpu_core_count    = 1
 }
@@ -60,12 +60,12 @@ resource "alicloud_instance" "instance" {
   instance_charge_type 	= "PostPaid"
   internet_charge_type 	= "PayByBandwidth" # PayByBandwidth / PayByTraffic
   instance_name        	= "terraform_test_ecs"
-  system_disk_size 	= 40
+  system_disk_size 	= 20
   password 		= "Admin123"
   system_disk_performance_level = "PL0"
   spot_strategy         = "SpotAsPriceGo"
   system_disk_category  = "cloud_auto"
-  internet_max_bandwidth_out = 3
+  internet_max_bandwidth_out = 2
 
   connection {
       type     = "ssh"
