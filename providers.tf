@@ -34,9 +34,10 @@ data "alicloud_zones" "default" {
 data "alicloud_instance_types" "type" {
   availability_zone = data.alicloud_zones.default.zones[0].id
   sorted_by         = "Price"
-  instance_type_family = "ecs.c8y"
+  instance_type_family = "ecs.c8y" # ecs.c8y / ecs.g8y / ecs.t6-c2m1 / ecs.e-c4m1
   is_outdated       = false
-  cpu_core_count    = 1
+  #cpu_core_count    = 1
+  #memory_size = 0.5
 }
 
 resource "alicloud_vswitch" "vsw" {
