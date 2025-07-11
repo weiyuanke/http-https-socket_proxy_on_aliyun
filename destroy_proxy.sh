@@ -8,6 +8,7 @@ if [[ "$OSTYPE" =~ ^darwin ]];then
   for svc in `networksetup -listallnetworkservices`; do
       if [[ $svc != *"a network service is disabled"* ]];then
           networksetup -setsocksfirewallproxystate ${svc} off
+          networksetup -setdnsservers ${svc} empty
       fi
   done
   ps ax|grep 'socket_to_http/socks2http'|grep -v grep|awk '{print $1}'|xargs kill

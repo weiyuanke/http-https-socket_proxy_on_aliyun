@@ -23,6 +23,7 @@ if [[ "$OSTYPE" =~ ^darwin ]];then
   for svc in `networksetup -listallnetworkservices`; do
       if [[ $svc != *"a network service is disabled"* ]];then
           networksetup -setsocksfirewallproxy ${svc} 127.0.0.1 9002
+          networksetup -setdnsservers ${svc} 8.8.8.8 8.8.4.4
       fi
   done
 fi
