@@ -37,7 +37,7 @@ data "alicloud_instance_types" "type" {
   #instance_type_family = "ecs.g8y" # ecs.c8y / ecs.g8y / ecs.t6-c2m1 / ecs.e-c4m1
   is_outdated       = false
   #cpu_core_count    = 1
-  memory_size = 0.5
+  #memory_size = 0.5
 }
 
 resource "alicloud_vswitch" "vsw" {
@@ -66,7 +66,7 @@ resource "alicloud_instance" "instance" {
   system_disk_performance_level = "PL0"
   spot_strategy         = "SpotAsPriceGo"
   system_disk_category  = "cloud_auto"
-  internet_max_bandwidth_out = 2
+  internet_max_bandwidth_out = 1
 
   connection {
       type     = "ssh"
