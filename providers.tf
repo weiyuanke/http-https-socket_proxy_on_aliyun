@@ -3,7 +3,7 @@
 # export ALICLOUD_ACCESS_KEY=xxxxx
 # export ALICLOUD_SECRET_KEY=xxxxx
 provider "alicloud" {
-  region = "cn-hongkong" # cn-beijing / us-east-1 / us-west-1 / ap-northeast-1
+  region = "us-west-1" # cn-beijing / us-east-1 / us-west-1 / ap-northeast-1
 }
 
 resource "alicloud_vpc" "vpc" {
@@ -12,7 +12,6 @@ resource "alicloud_vpc" "vpc" {
 }
 
 resource "alicloud_security_group" "default" {
-  name   = "default"
   vpc_id = alicloud_vpc.vpc.id
 }
 
