@@ -2,4 +2,4 @@
 sudo echo "starting proxy... ..."
 CurDir=$(dirname $0)
 cd $CurDir
-terraform apply -auto-approve
+terraform apply -auto-approve -parallelism=15

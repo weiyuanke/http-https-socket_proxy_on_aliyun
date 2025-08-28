@@ -6,6 +6,10 @@ provider "alicloud" {
   region = "us-west-1" # cn-beijing / us-east-1 / us-west-1 / ap-northeast-1
 }
 
+data "alicloud_zones" "default" {
+  available_resource_creation = "VSwitch"
+}
+
 resource "alicloud_vpc" "vpc" {
   vpc_name = "terraform_test_vpc"
   cidr_block = "172.16.0.0/12"
@@ -24,10 +28,6 @@ resource "alicloud_security_group_rule" "allow_all_tcp" {
   priority          = 1
   security_group_id = alicloud_security_group.default.id
   cidr_ip           = "0.0.0.0/0"
-}
-
-data "alicloud_zones" "default" {
-  available_resource_creation = "VSwitch"
 }
 
 data "alicloud_instance_types" "type" {
