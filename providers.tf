@@ -3,7 +3,7 @@
 # export ALICLOUD_ACCESS_KEY=xxxxx
 # export ALICLOUD_SECRET_KEY=xxxxx
 provider "alicloud" {
-  region = "us-west-1" # cn-beijing / us-east-1 / us-west-1 / ap-northeast-1
+  region = "cn-hongkong" # cn-beijing / us-east-1 / us-west-1 / ap-northeast-1
 }
 
 data "alicloud_zones" "default" {
@@ -35,8 +35,8 @@ data "alicloud_instance_types" "type" {
   sorted_by         = "Price"
   #instance_type_family = "ecs.g8y" # ecs.c8y / ecs.g8y / ecs.t6-c2m1 / ecs.e-c4m1
   is_outdated       = false
-  cpu_core_count    = 1
-  #memory_size = 0.5
+  #cpu_core_count    = 1
+  memory_size = 0.5
 }
 
 resource "alicloud_vswitch" "vsw" {
