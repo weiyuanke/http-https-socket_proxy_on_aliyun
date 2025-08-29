@@ -76,7 +76,7 @@ apply_terraform() {
 
 # 主程序
 main() {
-    log_info "开始启动代理服务..."
+    sudo log_info "开始启动代理服务..."
 
     # 获取当前目录
     CurDir=$(dirname "$0")
