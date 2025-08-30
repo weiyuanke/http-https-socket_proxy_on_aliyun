@@ -24,6 +24,22 @@ log_header() {
     echo -e "${BLUE}==== $1 ====${NC}"
 }
 
+# 终止本地 SOCKS 到 HTTP 转换进程
+kill_socks2http() {
+    log_info "终止本地 SOCKS 到 HTTP 转换进程..."
+
+    # 查找并终止 socks2http 进程
+    local pids
+    pids=$(ps ax | grep 'socket_to_http/socks2http' | grep -v grep | awk '{print $1}')
+
+    if [[ -n "$pids" ]]; then
+        echo "$pids" | xargs kill
+        log_info "已终止 SOCKS 到 HTTP 转换进程"
+    else
+        log_info "未找到运行中的 SOCKS 到 HTTP 转换进程"
+    fi
+}
+
 # 显示代理配置信息
 show_proxy_info() {
     clear
@@ -143,6 +159,9 @@ establish_ssh_tunnel() {
 main() {
     # 显示代理配置信息
     show_proxy_info
+
+    # try clean
+    kill_socks2http
     
     # 启动 SOCKS 到 HTTP 转换服务
     start_socks2http || exit 1
