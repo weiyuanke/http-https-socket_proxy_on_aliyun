@@ -3,7 +3,10 @@
 # export ALICLOUD_ACCESS_KEY=xxxxx
 # export ALICLOUD_SECRET_KEY=xxxxx
 provider "alicloud" {
-  region = "cn-hongkong" # cn-beijing / us-east-1 / us-west-1 / ap-northeast-1
+  region = "eu-central-1" 
+  # 中国香港 cn-hongkong / 日本（东京） ap-northeast-1 / 韩国（首尔）ap-northeast-2 / 新加坡 ap-southeast-1 / 泰国（曼谷） ap-southeast-7
+  # 美国（弗吉尼亚） us-east-1 / 美国（硅谷） us-west-1 / 墨西哥 na-south-1 / 英国（伦敦） eu-west-1 / 阿联酋（迪拜） me-east-1
+  # 德国（法兰克福） eu-central-1 / 马来西亚（吉隆坡） ap-southeast-3 / 菲律宾（马尼拉） ap-southeast-6 / 印度尼西亚（雅加达） ap-southeast-5
 }
 
 data "alicloud_zones" "default" {
@@ -37,6 +40,7 @@ data "alicloud_instance_types" "type" {
   is_outdated       = false
   #cpu_core_count    = 1
   memory_size = 0.5
+  spot_strategy = "SpotAsPriceGo"
 }
 
 resource "alicloud_vswitch" "vsw" {
@@ -93,4 +97,3 @@ resource "alicloud_instance" "instance" {
 output "public_ip" {
   value = alicloud_instance.instance.public_ip
 }
-
