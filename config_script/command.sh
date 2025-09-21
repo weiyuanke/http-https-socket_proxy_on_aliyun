@@ -24,6 +24,24 @@ log_header() {
     echo -e "${BLUE}==== $1 ====${NC}"
 }
 
+# 获取本地 IP 地址
+get_local_ip() {
+    # 尝试多种方法获取本地 IP
+    local_ip=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | head -1 | awk '{print $2}')
+
+    # 如果 ifconfig 不可用，尝试其他方法
+    if [[ -z "$local_ip" ]]; then
+        local_ip=$(hostname -I | awk '{print $1}')
+    fi
+
+    # 如果还是获取不到，使用默认值
+    if [[ -z "$local_ip" ]]; then
+        local_ip="127.0.0.1"
+    fi
+
+    echo "$local_ip"
+}
+
 # 终止本地 SOCKS 到 HTTP 转换进程
 kill_socks2http() {
     log_info "终止本地 SOCKS 到 HTTP 转换进程..."
@@ -42,6 +60,10 @@ kill_socks2http() {
 
 # 显示代理配置信息
 show_proxy_info() {
+    # 获取本地 IP 地址
+    local local_ip
+    local_ip=$(get_local_ip)
+
     clear
     echo
     log_header "代理配置完成"
@@ -51,12 +73,12 @@ show_proxy_info() {
     log_info "root 密码: Admin123"
     echo
     log_header "本地代理配置"
-    log_info "SOCKS5 代理: 127.0.0.1:9002"
-    log_info "HTTP/HTTPS 代理: 127.0.0.1:8080"
+    log_info "SOCKS5 代理: ${local_ip}:9002"
+    log_info "HTTP/HTTPS 代理: ${local_ip}:8080"
     echo
     log_header "环境变量设置（可选）"
-    echo "export HTTP_PROXY=socks5h://127.0.0.1:9002 HTTPS_PROXY=socks5h://127.0.0.1:9002"
-    echo "export HTTP_PROXY=http://127.0.0.1:8080 HTTPS_PROXY=http://127.0.0.1:8080"
+    echo "export HTTP_PROXY=socks5h://${local_ip}:9002 HTTPS_PROXY=socks5h://${local_ip}:9002"
+    echo "export HTTP_PROXY=http://${local_ip}:8080 HTTPS_PROXY=http://${local_ip}:8080"
     echo
     log_header "系统代理设置"
 }
@@ -87,6 +109,10 @@ start_socks2http() {
 
 # 配置 macOS 系统代理
 configure_macos_proxy() {
+    # 获取本地 IP 地址
+    local local_ip
+    local_ip=$(get_local_ip)
+
     log_info "配置 macOS 系统代理..."
 
     # 检查 networksetup 命令是否存在
@@ -109,7 +135,7 @@ configure_macos_proxy() {
         # 跳过禁用的网络服务
         if [[ $svc != *"a network service is disabled"* ]]; then
             log_info "配置网络服务 '$svc' 的代理设置..."
-            sudo networksetup -setsocksfirewallproxy "${svc}" 127.0.0.1 9002
+            sudo networksetup -setsocksfirewallproxy "${svc}" "${local_ip}" 9002
             sudo networksetup -setdnsservers "${svc}" 8.8.8.8 8.8.4.4
         fi
     done <<< "$services"
@@ -119,6 +145,10 @@ configure_macos_proxy() {
 
 # 配置 Linux 系统代理
 configure_linux_proxy() {
+    # 获取本地 IP 地址
+    local local_ip
+    local_ip=$(get_local_ip)
+
     log_info "配置 Linux 系统代理..."
 
     # 检查 gsettings 命令是否存在
@@ -128,7 +158,7 @@ configure_linux_proxy() {
     fi
 
     # 配置 GNOME 代理设置
-    gsettings set org.gnome.system.proxy.socks host '127.0.0.1'
+    gsettings set org.gnome.system.proxy.socks host "${local_ip}"
     gsettings set org.gnome.system.proxy.socks port 9002
 
     log_info "Linux 系统代理配置完成"
@@ -144,10 +174,10 @@ establish_ssh_tunnel() {
     # 根据操作系统类型执行相应的 SSH 命令
     if [[ "$OSTYPE" =~ ^darwin ]]; then
         # macOS 系统使用 sar 命令监控网络
-        sshpass -p Admin123 ssh -o StrictHostKeyChecking=no -D 9002 root@"${PubIP}" sar -n DEV 1
+        sshpass -p Admin123 ssh -o StrictHostKeyChecking=no -D 9002 root@"${PubIP}" sar -n DEV 5
     elif [[ "$OSTYPE" =~ ^linux ]]; then
         # Linux 系统使用 sar 命令监控网络
-        sshpass -p Admin123 ssh -o StrictHostKeyChecking=no -D 9002 root@"${PubIP}" sar -n DEV 1
+        sshpass -p Admin123 ssh -o StrictHostKeyChecking=no -D 9002 root@"${PubIP}" sar -n DEV 5
     else
         # 其他系统使用简单的 uptime 命令保持连接
         sshpass -p Admin123 ssh -o StrictHostKeyChecking=no -D 9002 root@"${PubIP}" uptime
