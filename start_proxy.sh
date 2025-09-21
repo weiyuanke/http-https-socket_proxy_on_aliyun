@@ -71,7 +71,7 @@ init_terraform() {
 # 应用 Terraform 配置
 apply_terraform() {
     log_info "应用 Terraform 配置..."
-    terraform apply -auto-approve -parallelism=15
+    terraform apply -auto-approve -parallelism=20
 }
 
 # 主程序
