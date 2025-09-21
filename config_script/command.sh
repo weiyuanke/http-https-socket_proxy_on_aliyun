@@ -64,20 +64,19 @@ show_proxy_info() {
 # 启动 SOCKS 到 HTTP 转换服务
 start_socks2http() {
     log_info "启动 SOCKS 到 HTTP 转换服务..."
-    
+
     # 检查 socks2http 文件是否存在
     if [[ ! -f "./socket_to_http/socks2http" ]]; then
         log_error "未找到 ./socket_to_http/socks2http 文件"
         return 1
     fi
-    
+
     # 启动 socks2http 服务
     ./socket_to_http/socks2http -http 8080 -socks 9002 &
-    
+
     # 检查进程是否启动成功
     local pid=$!
-    sleep 2
-    
+
     if kill -0 $pid 2>/dev/null; then
         log_info "SOCKS 到 HTTP 转换服务已启动 (PID: $pid)"
     else
@@ -89,22 +88,22 @@ start_socks2http() {
 # 配置 macOS 系统代理
 configure_macos_proxy() {
     log_info "配置 macOS 系统代理..."
-    
+
     # 检查 networksetup 命令是否存在
     if ! command -v networksetup &> /dev/null; then
         log_error "未找到 networksetup 命令"
         return 1
     fi
-    
+
     # 获取网络服务列表
     local services
     services=$(networksetup -listallnetworkservices 2>/dev/null)
-    
+
     if [[ $? -ne 0 ]]; then
         log_error "无法获取网络服务列表"
         return 1
     fi
-    
+
     # 逐个配置代理设置
     while IFS= read -r svc; do
         # 跳过禁用的网络服务
@@ -114,34 +113,34 @@ configure_macos_proxy() {
             sudo networksetup -setdnsservers "${svc}" 8.8.8.8 8.8.4.4
         fi
     done <<< "$services"
-    
+
     log_info "macOS 系统代理配置完成"
 }
 
 # 配置 Linux 系统代理
 configure_linux_proxy() {
     log_info "配置 Linux 系统代理..."
-    
+
     # 检查 gsettings 命令是否存在
     if ! command -v gsettings &> /dev/null; then
         log_error "未找到 gsettings 命令"
         return 1
     fi
-    
+
     # 配置 GNOME 代理设置
     gsettings set org.gnome.system.proxy.socks host '127.0.0.1'
     gsettings set org.gnome.system.proxy.socks port 9002
-    
+
     log_info "Linux 系统代理配置完成"
 }
 
 # 建立 SSH 隧道并监控连接
 establish_ssh_tunnel() {
     log_info "建立 SSH 隧道并监控连接..."
-    
+
     # 删除已知主机记录以避免主机密钥检查问题
     rm -f "${HOME}/.ssh/known_hosts"
-    
+
     # 根据操作系统类型执行相应的 SSH 命令
     if [[ "$OSTYPE" =~ ^darwin ]]; then
         # macOS 系统使用 sar 命令监控网络
@@ -162,10 +161,10 @@ main() {
 
     # try clean
     kill_socks2http
-    
+
     # 启动 SOCKS 到 HTTP 转换服务
     start_socks2http || exit 1
-    
+
     # 根据操作系统类型配置系统代理
     if [[ "$OSTYPE" =~ ^darwin ]]; then
         # macOS 系统
@@ -177,12 +176,12 @@ main() {
         log_warn "不支持的操作系统类型: $OSTYPE"
         log_warn "请手动配置系统代理"
     fi
-    
+
     log_header "连接到远程服务器"
     log_info "正在建立 SSH 隧道并监控连接..."
     log_info "按 Ctrl+C 可以断开连接"
     echo
-    
+
     # 建立 SSH 隧道并监控连接
     establish_ssh_tunnel
 }
