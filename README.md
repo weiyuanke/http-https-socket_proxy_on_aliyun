@@ -22,7 +22,7 @@
 
 ## 系统要求
 
-- macOS 或 Linux 操作系统
+- macOS 或 Linux 操作系统 (包括 Ubuntu、Debian、Fedora 等主流发行版)
 - 阿里云账号及Access Key ID和Secret Access Key
 
 ## 快速开始
@@ -44,6 +44,8 @@ export ALICLOUD_SECRET_KEY="your-secret-access-key"
 - Terraform (基础设施即代码工具)
 - sshpass (SSH自动密码登录工具)
 - Homebrew (macOS, 如果未安装)
+
+该脚本支持多种Linux发行版，包括Ubuntu/Debian和Fedora。
 
 ### 3. 启动代理服务
 
