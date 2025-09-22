@@ -189,14 +189,14 @@ main() {
     # 显示代理配置信息
     show_proxy_info
 
-    # try clean
-    kill_socks2http
-
-    # 启动 SOCKS 到 HTTP 转换服务
-    start_socks2http || exit 1
-
     # 根据操作系统类型配置系统代理
     if [[ "$OSTYPE" =~ ^darwin ]]; then
+        # try clean
+        kill_socks2http
+
+        # 启动 SOCKS 到 HTTP 转换服务
+        start_socks2http || exit 1
+
         # macOS 系统
         configure_macos_proxy || exit 1
     elif [[ "$OSTYPE" =~ ^linux ]]; then
