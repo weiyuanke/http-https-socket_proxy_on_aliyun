@@ -174,10 +174,10 @@ establish_ssh_tunnel() {
     # 根据操作系统类型执行相应的 SSH 命令
     if [[ "$OSTYPE" =~ ^darwin ]]; then
         # macOS 系统使用 sar 命令监控网络
-        sshpass -p Admin123 ssh -o StrictHostKeyChecking=no -D 0.0.0.0:9002 root@"${PubIP}" sar -n DEV 5
+        sshpass -p Admin123 ssh -o StrictHostKeyChecking=no -D 0.0.0.0:9002 root@"${PubIP}" sar -n DEV 1
     elif [[ "$OSTYPE" =~ ^linux ]]; then
         # Linux 系统使用 sar 命令监控网络
-        sshpass -p Admin123 ssh -o StrictHostKeyChecking=no -D 0.0.0.0:9002 root@"${PubIP}" sar -n DEV 5
+        sshpass -p Admin123 ssh -o StrictHostKeyChecking=no -D 0.0.0.0:9002 root@"${PubIP}" sar -n DEV 1
     else
         # 其他系统使用简单的 uptime 命令保持连接
         sshpass -p Admin123 ssh -o StrictHostKeyChecking=no -D 0.0.0.0:9002 root@"${PubIP}" uptime
