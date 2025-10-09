@@ -90,15 +90,18 @@ resource "alicloud_instance" "instance" {
       host = self.public_ip
   }
 
+  provisioner "file" {
+    source      = "./config_script/remote.sh"
+    destination = "/tmp/remote.sh"
+  }
+
   provisioner "remote-exec" {
     inline = [
-      "uptime",
-      "ufw disable",
-      "sudo apt-get update",
-      "sudo apt-get install -y iftop docker.io",
-      "VPN_IPSEC_PSK=yMby685nm4a9gdJv2ny4 VPN_USER=vpnuser VPN_PASSWORD=7dXBRbuZyxgKZwzv VPN_ANDROID_MTU_FIX=yes VPN_L2TP_NET=10.1.0.0/16 VPN_L2TP_LOCAL=10.1.0.1 VPN_L2TP_POOL=10.1.0.10-10.1.254.254 VPN_XAUTH_NET=10.2.0.0/16 VPN_XAUTH_POOL=10.2.0.10-10.2.254.254 docker run --name vpn-server --restart=always -v ikev2-vpn-data:/etc/ipsec.d -v /lib/modules:/lib/modules:ro -p 500:500/udp -p 4500:4500/udp -d --privileged hwdsl2/ipsec-vpn-server",
+      "chmod +x /tmp/remote.sh",
+      "/tmp/remote.sh",
     ]
   }
+
   provisioner "local-exec" {
     command = "./config_script/command.sh"
     environment = {

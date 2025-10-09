@@ -71,9 +71,9 @@ show_proxy_info() {
     log_info "阿里云 ECS 实例已启动并运行"
     log_info "公网 IP: ${PubIP}"
     log_info "root 密码: Admin123"
-    log_info "username: vpnuser"
-    log_info "password: fFywobAKhc2FdrGn"
-    log_info "IPsecPSK: C8rYEeHPUbpn3KhVukch"
+    log_info "username: vpn"
+    log_info "password: Admin123"
+    log_info "IPsecPSK: Admin123"
     echo
     log_header "本地代理配置"
     log_info "SOCKS5 代理: ${local_ip}:9002"
