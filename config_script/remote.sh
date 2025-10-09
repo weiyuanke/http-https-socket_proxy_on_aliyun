@@ -16,7 +16,10 @@ if [ $DOCKERMODE = "true" ];then
   export VPN_L2TP_POOL=10.1.0.10-10.1.254.254 
   export VPN_XAUTH_NET=10.2.0.0/16 
   export VPN_XAUTH_POOL=10.2.0.10-10.2.254.254 
-  docker run --name vpn-server --restart=always -v ikev2-vpn-data:/etc/ipsec.d -v /lib/modules:/lib/modules:ro -p 500:500/udp -p 4500:4500/udp -d --privileged hwdsl2/ipsec-vpn-server
+  docker run --name vpn-server --restart=always \
+    -v ikev2-vpn-data:/etc/ipsec.d -v /lib/modules:/lib/modules:ro \
+    -p 500:500/udp -p 4500:4500/udp -d --privileged \
+    hwdsl2/ipsec-vpn-server
   exit 0
 fi
 
