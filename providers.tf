@@ -3,7 +3,7 @@
 # export ALICLOUD_ACCESS_KEY=xxxxx
 # export ALICLOUD_SECRET_KEY=xxxxx
 provider "alicloud" {
-  region = "eu-central-1"
+  region = "cn-hongkong"
   # 中国香港 cn-hongkong / 日本（东京） ap-northeast-1 / 韩国（首尔）ap-northeast-2 / 新加坡 ap-southeast-1 / 泰国（曼谷） ap-southeast-7
   # 美国（弗吉尼亚） us-east-1 / 美国（硅谷） us-west-1 / 墨西哥 na-south-1 / 英国（伦敦） eu-west-1 / 阿联酋（迪拜） me-east-1
   # 德国（法兰克福） eu-central-1 / 马来西亚（吉隆坡） ap-southeast-3 / 菲律宾（马尼拉） ap-southeast-6 / 印度尼西亚（雅加达） ap-southeast-5
@@ -33,6 +33,17 @@ resource "alicloud_security_group_rule" "allow_all_tcp" {
   cidr_ip           = "0.0.0.0/0"
 }
 
+resource "alicloud_security_group_rule" "allow_all_udp" {
+  type              = "ingress"
+  ip_protocol       = "udp"
+  nic_type          = "intranet"
+  policy            = "accept"
+  port_range        = "1/65535"
+  priority          = 1
+  security_group_id = alicloud_security_group.default.id
+  cidr_ip           = "0.0.0.0/0"
+}
+
 data "alicloud_instance_types" "type" {
   availability_zone = data.alicloud_zones.default.zones[0].id
   sorted_by         = "Price"
@@ -50,7 +61,7 @@ resource "alicloud_vswitch" "vsw" {
 }
 
 data "alicloud_images" "default" {
-  name_regex  = "^ubuntu_24_04_.*"
+  name_regex  = "^ubuntu_18_04_.*"
   most_recent = true
   instance_type         = data.alicloud_instance_types.type.instance_types.0.id
   owners      = "system"
@@ -82,8 +93,10 @@ resource "alicloud_instance" "instance" {
   provisioner "remote-exec" {
     inline = [
       "uptime",
-      #"sudo apt-get update",
-      #"sudo apt-get install -y iftop", # docker.io
+      "ufw disable",
+      "sudo apt-get update",
+      "sudo apt-get install -y iftop docker.io",
+      "VPN_IPSEC_PSK=yMby685nm4a9gdJv2ny4 VPN_USER=vpnuser VPN_PASSWORD=7dXBRbuZyxgKZwzv VPN_ANDROID_MTU_FIX=yes VPN_L2TP_NET=10.1.0.0/16 VPN_L2TP_LOCAL=10.1.0.1 VPN_L2TP_POOL=10.1.0.10-10.1.254.254 VPN_XAUTH_NET=10.2.0.0/16 VPN_XAUTH_POOL=10.2.0.10-10.2.254.254 docker run --name vpn-server --restart=always -v ikev2-vpn-data:/etc/ipsec.d -v /lib/modules:/lib/modules:ro -p 500:500/udp -p 4500:4500/udp -d --privileged hwdsl2/ipsec-vpn-server",
     ]
   }
   provisioner "local-exec" {
