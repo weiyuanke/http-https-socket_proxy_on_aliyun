@@ -1,4 +1,4 @@
-# 阿里云HTTP/HTTPS/SOCKS代理与VPN服务
+# 快速在阿里云上部署，HTTP/HTTPS/SOCKS代理与VPN服务
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey)
