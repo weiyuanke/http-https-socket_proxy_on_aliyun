@@ -71,16 +71,20 @@ show_proxy_info() {
     log_info "阿里云 ECS 实例已启动并运行"
     log_info "公网 IP: ${PubIP}"
     log_info "root 密码: Admin123"
+    echo
+    log_info "VPN配置"
+    log_info "IP地址: ${PubIP}"
     log_info "username: vpn"
     log_info "password: Admin123"
-    log_info "IPsecPSK: Admin123"
+    log_info "IPsec PSK: Admin123"
     echo
-    log_header "本地代理配置"
+    log_header "SOCKS5/HTTP/HTTPS代理配置"
     log_info "SOCKS5 代理: ${local_ip}:9002"
     log_info "HTTP/HTTPS 代理: ${local_ip}:8080"
     echo
-    log_header "环境变量设置（可选）"
+    log_header "终端环境代理设置（可选）"
     echo "export HTTP_PROXY=socks5h://${local_ip}:9002 HTTPS_PROXY=socks5h://${local_ip}:9002"
+    echo "或者"
     echo "export HTTP_PROXY=http://${local_ip}:8080 HTTPS_PROXY=http://${local_ip}:8080"
     echo
     log_header "系统代理设置"
