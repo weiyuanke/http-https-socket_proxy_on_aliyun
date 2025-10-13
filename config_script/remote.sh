@@ -1,15 +1,21 @@
 #!/bin/bash
 # https://github.com/Hero-oo/IPSec-Server-Setup/blob/master/setup.sh
 # https://github.com/hwdsl2/docker-ipsec-vpn-server/tree/master
+
+# This script accepts a parameter to determine if VPN should be deployed
+DEPLOY_VPN=${1:-true}
+
 set -x
 uptime
-ufw disable
-sudo apt-get update
-echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf
-sudo sysctl -p
 
-sudo apt-get install -y iftop docker.io
-cat > vpn.env << EOF
+if [ "$DEPLOY_VPN" = "true" ]; then
+    ufw disable
+    sudo apt-get update
+    echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf
+    sudo sysctl -p
+    echo "Deploying VPN server..."
+    sudo apt-get install -y iftop docker.io
+    cat > vpn.env << 'EOF'
 # Define IPsec PSK, VPN username and password
 # - DO NOT put "" or '' around values, or add space around =
 # - DO NOT use these special characters within values: \ " '
@@ -51,9 +57,10 @@ VPN_L2TP_POOL=10.1.0.10-10.1.254.254
 VPN_XAUTH_NET=10.2.0.0/16
 VPN_XAUTH_POOL=10.2.0.10-10.2.254.254
 EOF
-docker run --name vpn-server --restart=always --env-file ./vpn.env \
-  -v ikev2-vpn-data:/etc/ipsec.d -v /lib/modules:/lib/modules:ro \
-  -d --privileged --network host \
-  hwdsl2/ipsec-vpn-server
-#-p 500:500/udp -p 4500:4500/udp -d --privileged \
-
+    docker run --name vpn-server --restart=always --env-file ./vpn.env \
+      -v ikev2-vpn-data:/etc/ipsec.d -v /lib/modules:/lib/modules:ro \
+      -d --privileged --network host \
+      hwdsl2/ipsec-vpn-server
+else
+    echo "Deploying without VPN server..."
+fi

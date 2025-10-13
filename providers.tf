@@ -3,6 +3,12 @@
 # export ALICLOUD_ACCESS_KEY=xxxxx
 # export ALICLOUD_SECRET_KEY=xxxxx
 
+variable "deploy_vpn" {
+  description = "Whether to deploy VPN server on the instance"
+  type        = bool
+  default     = true
+}
+
 terraform {
   required_providers {
     alicloud = {
@@ -108,7 +114,7 @@ resource "alicloud_instance" "instance" {
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/remote.sh",
-      "/tmp/remote.sh",
+      "/tmp/remote.sh ${var.deploy_vpn}",
     ]
   }
 
@@ -116,6 +122,7 @@ resource "alicloud_instance" "instance" {
     command = "./config_script/command.sh"
     environment = {
       PubIP = self.public_ip
+      DEPLOY_VPN = var.deploy_vpn
     }
   }
 }

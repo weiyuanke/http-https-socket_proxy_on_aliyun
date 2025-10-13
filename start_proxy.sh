@@ -27,6 +27,45 @@ check_result() {
     fi
 }
 
+# 显示帮助信息
+show_help() {
+    echo "用法: $0 [选项]"
+    echo "选项:"
+    echo "  -v, --vpn        部署 VPN 服务 (默认)"
+    echo "  -n, --no-vpn     不部署 VPN 服务，只运行基础配置"
+    echo "  -h, --help       显示此帮助信息"
+    echo ""
+    echo "示例:"
+    echo "  $0                  # 部署带 VPN 的服务 (默认)"
+    echo "  $0 --no-vpn         # 部署不带 VPN 的服务"
+    echo "  $0 -n               # 部署不带 VPN 的服务"
+}
+
+# 解析命令行参数
+deploy_vpn=true
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -n|--no-vpn)
+            deploy_vpn=false
+            shift
+            ;;
+        -v|--vpn)
+            deploy_vpn=true
+            shift
+            ;;
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        *)
+            log_error "未知参数: $1"
+            show_help
+            exit 1
+            ;;
+    esac
+done
+
 # 检查依赖项
 check_dependencies() {
     log_info "检查依赖项..."
@@ -71,13 +110,23 @@ init_terraform() {
 # 应用 Terraform 配置
 apply_terraform() {
     log_info "应用 Terraform 配置..."
-    terraform apply -auto-approve -parallelism=20
+    if [ "$deploy_vpn" = true ]; then
+        log_info "部署带 VPN 的服务..."
+        terraform apply -auto-approve -var="deploy_vpn=true" -parallelism=20
+    else
+        log_info "部署不带 VPN 的服务..."
+        terraform apply -auto-approve -var="deploy_vpn=false" -parallelism=20
+    fi
 }
 
 # 主程序
 main() {
     sudo echo "-----------"
-    log_info "开始启动代理服务..."
+    if [ "$deploy_vpn" = true ]; then
+        log_info "开始启动代理服务 (包含 VPN)..."
+    else
+        log_info "开始启动代理服务 (不包含 VPN)..."
+    fi
 
     # 获取当前目录
     CurDir=$(dirname "$0")

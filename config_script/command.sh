@@ -72,12 +72,17 @@ show_proxy_info() {
     log_info "公网 IP: ${PubIP}"
     log_info "root 密码: Admin123"
     echo
-    log_info "VPN配置"
-    log_info "IP地址: ${PubIP}"
-    log_info "username: vpn"
-    log_info "password: Admin123"
-    log_info "IPsec PSK: Admin123"
-    echo
+    if [[ "${DEPLOY_VPN}" == "true" ]]; then
+        log_info "VPN配置"
+        log_info "IP地址: ${PubIP}"
+        log_info "username: vpn"
+        log_info "password: Admin123"
+        log_info "IPsec PSK: Admin123"
+        echo
+    else
+        log_info "VPN 未部署"
+        echo
+    fi
     log_header "SOCKS5/HTTP/HTTPS代理配置"
     log_info "SOCKS5 代理: ${local_ip}:9002"
     log_info "HTTP/HTTPS 代理: ${local_ip}:8080"
@@ -183,12 +188,17 @@ display_proxy_info_periodically() {
         echo
         log_info "阿里云 ECS 实例公网 IP: ${PubIP}"
         echo
-        log_info "VPN配置:"
-        log_info "  IP地址: ${PubIP}"
-        log_info "  用户名: vpn"
-        log_info "  密码: Admin123"
-        log_info "  IPsec PSK: Admin123"
-        echo
+        if [[ "${DEPLOY_VPN}" == "true" ]]; then
+            log_info "VPN配置:"
+            log_info "  IP地址: ${PubIP}"
+            log_info "  用户名: vpn"
+            log_info "  密码: Admin123"
+            log_info "  IPsec PSK: Admin123"
+            echo
+        else
+            log_info "VPN 未部署"
+            echo
+        fi
         log_info "SOCKS5 代理: ${local_ip}:9002"
         log_info "HTTP/HTTPS 代理: ${local_ip}:8080"
         echo
