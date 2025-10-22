@@ -159,6 +159,7 @@ main() {
     timeout --signal=INT ${TIMEOUT} bash -c "$(declare -f apply_terraform log_info); apply_terraform"
 
     # 防止忘记关闭代理产生不必要的费用
+    log_info "稍等一下..."
     sleep 20
     log_info "============================================================"
     log_info "代理已经运行${TIMEOUT}, 开始销毁代理..."
