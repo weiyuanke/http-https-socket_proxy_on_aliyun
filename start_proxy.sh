@@ -5,6 +5,11 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
+export RED GREEN YELLOW NC
+
+# 代理默认运行时间（秒）
+TIMEOUT=3600
+export TIMEOUT
 
 # 日志函数
 log_info() {
@@ -43,6 +48,7 @@ show_help() {
 
 # 解析命令行参数
 deploy_vpn=true
+export deploy_vpn
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -121,7 +127,6 @@ apply_terraform() {
 
 # 主程序
 main() {
-    sudo echo "-----------"
     if [ "$deploy_vpn" = true ]; then
         log_info "开始启动代理服务 (包含 VPN)..."
     else
@@ -141,10 +146,22 @@ main() {
     # 初始化 Terraform
     init_terraform
 
-    # 应用 Terraform 配置
-    apply_terraform
-
+    log_info "============================================================"
     log_info "使用完毕后，请运行 ./destroy_proxy.sh 销毁资源以避免产生不必要的费用"
+    log_info "代理默认运行${TIMEOUT}秒 ，超时会自动销毁，以避免产生不必要的费用"
+    log_info "============================================================"
+    log_info ""
+    sleep 5
+
+    # 应用 Terraform 配置
+    log_info "开始拉起代理..."
+    timeout ${TIMEOUT} bash -c "$(declare -f apply_terraform log_info); apply_terraform"
+
+    # 防止忘记关闭代理产生不必要的费用
+    sleep 20
+    log_info "============================================================"
+    log_info "代理已经运行${TIMEOUT}, 开始销毁代理..."
+    bash ./destroy_proxy.sh
 }
 
 # 执行主程序

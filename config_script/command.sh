@@ -147,8 +147,8 @@ configure_macos_proxy() {
         # 跳过禁用的网络服务
         if [[ $svc != *"a network service is disabled"* ]]; then
             log_info "配置网络服务 '$svc' 的代理设置..."
-            sudo networksetup -setsocksfirewallproxy "${svc}" "${local_ip}" 9002
-            sudo networksetup -setdnsservers "${svc}" 8.8.8.8 8.8.4.4
+            networksetup -setsocksfirewallproxy "${svc}" "${local_ip}" 9002
+            networksetup -setdnsservers "${svc}" 8.8.8.8 8.8.4.4
         fi
     done <<< "$services"
 
@@ -185,28 +185,22 @@ display_proxy_info_periodically() {
     while true; do
         echo
         log_header "======= 当前代理配置信息 ======="
-        echo
         log_info "阿里云 ECS 实例公网 IP: ${PubIP}"
-        echo
         if [[ "${DEPLOY_VPN}" == "true" ]]; then
             log_info "VPN配置:"
             log_info "  IP地址: ${PubIP}"
             log_info "  用户名: vpn"
             log_info "  密码: Admin123"
             log_info "  IPsec PSK: Admin123"
-            echo
         else
             log_info "VPN 未部署"
-            echo
         fi
         log_info "SOCKS5 代理: ${local_ip}:9002"
         log_info "HTTP/HTTPS 代理: ${local_ip}:8080"
-        echo
         log_info "终端环境变量设置:"
-        echo "  export HTTP_PROXY=socks5h://${local_ip}:9002 HTTPS_PROXY=socks5h://${local_ip}:9002"
-        echo "  或者"
-        echo "  export HTTP_PROXY=http://${local_ip}:8080 HTTPS_PROXY=http://${local_ip}:8080"
-        echo
+        log_info "  export HTTP_PROXY=socks5h://${local_ip}:9002 HTTPS_PROXY=socks5h://${local_ip}:9002"
+        log_info "  或者"
+        log_info "  export HTTP_PROXY=http://${local_ip}:8080 HTTPS_PROXY=http://${local_ip}:8080"
         log_header "======= 代理配置信息 END ======="
         echo
         # 等待60秒再显示一次
@@ -244,15 +238,15 @@ establish_ssh_tunnel() {
 # 信号处理函数
 cleanup() {
     log_info "接收到中断信号，正在清理..."
-    
+
     # 终止后台显示进程
     if [[ -n "$DISPLAY_PID" ]]; then
         kill $DISPLAY_PID 2>/dev/null
     fi
-    
+
     # 终止 socks2http 进程
     kill_socks2http
-    
+
     log_info "清理完成"
     exit 0
 }

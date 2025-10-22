@@ -258,8 +258,8 @@ chmod +x socket_to_http/*
 
 macOS系统代理配置使用 `networksetup` 命令，如遇到问题可手动重置：
 ```bash
-sudo networksetup -setsocksfirewallproxystate "Wi-Fi" off
-sudo networksetup -setdnsservers "Wi-Fi" empty
+networksetup -setsocksfirewallproxystate "Wi-Fi" off
+networksetup -setdnsservers "Wi-Fi" empty
 ```
 
 ### 5. SSH连接问题
