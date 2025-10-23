@@ -39,12 +39,15 @@ show_help() {
     echo "选项:"
     echo "  -v, --vpn        部署 VPN 服务 (默认)"
     echo "  -n, --no-vpn     不部署 VPN 服务，只运行基础配置"
+    echo "  -t, --timeout    代理运行时间（秒），默认3600秒"
     echo "  -h, --help       显示此帮助信息"
     echo ""
     echo "示例:"
     echo "  $0                  # 部署带 VPN 的服务 (默认)"
     echo "  $0 --no-vpn         # 部署不带 VPN 的服务"
     echo "  $0 -n               # 部署不带 VPN 的服务"
+    echo "  $0 --timeout 7200   # 部署服务，运行时间为7200秒"
+    echo "  $0 -t 1800          # 部署服务，运行时间为1800秒"
 }
 
 # 解析命令行参数
@@ -60,6 +63,17 @@ while [[ $# -gt 0 ]]; do
         -v|--vpn)
             deploy_vpn=true
             shift
+            ;;
+        -t|--timeout)
+            if [[ -n "$2" && "$2" =~ ^[0-9]+$ ]]; then
+                TIMEOUT="$2"
+                export TIMEOUT
+                shift 2
+            else
+                log_error "错误: --timeout 参数需要一个数字值"
+                show_help
+                exit 1
+            fi
             ;;
         -h|--help)
             show_help
@@ -160,7 +174,7 @@ main() {
 
     # 防止忘记关闭代理产生不必要的费用
     log_info "稍等一下..."
-    sleep 20
+    sleep 10
     log_warn "============================================================"
     log_warn "代理已经运行${TIMEOUT}, 开始销毁代理..."
     bash ./destroy_proxy.sh
