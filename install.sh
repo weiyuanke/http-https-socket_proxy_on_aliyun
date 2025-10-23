@@ -114,6 +114,11 @@ install_macos() {
     else
         log_info "sshpass已安装"
     fi
+
+    # 安装coreutils
+    log_info "安装coreutils..."
+    brew install coreutils
+    log_info "coreutils安装成功"
     
     # 安装terraform
     if ! command_exists terraform; then
