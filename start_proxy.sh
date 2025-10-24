@@ -133,10 +133,10 @@ apply_terraform() {
     log_info "应用 Terraform 配置..."
     if [ "$deploy_vpn" = true ]; then
         log_info "部署带 VPN 的服务..."
-        terraform apply -auto-approve -var="deploy_vpn=true" -parallelism=20
+        terraform apply -auto-approve -var="deploy_vpn=true" -var="timeout=${TIMEOUT}"  -parallelism=20
     else
         log_info "部署不带 VPN 的服务..."
-        terraform apply -auto-approve -var="deploy_vpn=false" -parallelism=20
+        terraform apply -auto-approve -var="deploy_vpn=false" -var="timeout=${TIMEOUT}"  -parallelism=20
     fi
 }
 

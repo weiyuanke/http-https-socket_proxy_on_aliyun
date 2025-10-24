@@ -9,6 +9,12 @@ variable "deploy_vpn" {
   default     = true
 }
 
+variable "timeout" {
+  description = "ECS实例运行的秒数（自动释放前的存活时间）"
+  type        = number
+  default     = 3600  # 默认1小时（3600秒）
+}
+
 terraform {
   required_providers {
     alicloud = {
@@ -98,6 +104,7 @@ resource "alicloud_instance" "instance" {
   spot_strategy         = "SpotAsPriceGo"
   system_disk_category  = "cloud_auto"
   internet_max_bandwidth_out = 1
+  auto_release_time = timeadd(timestamp(), "${var.timeout}s")
 
   connection {
       type     = "ssh"
