@@ -3,6 +3,9 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey)
 
+**Read this in other languages: [English](README_en.md), [中文](README.md).**
+
+
 基于阿里云的一键式代理和VPN服务，按分钟付费，快速部署，支持SOCKS、HTTP、HTTPS代理和多种VPN协议。
 
 ## 功能特性
