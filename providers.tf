@@ -126,7 +126,7 @@ resource "alicloud_instance" "instance" {
   }
 
   provisioner "local-exec" {
-    command = "./config_script/command.sh"
+    command = "./config_script/local.sh"
     environment = {
       PubIP = self.public_ip
       DEPLOY_VPN = var.deploy_vpn
