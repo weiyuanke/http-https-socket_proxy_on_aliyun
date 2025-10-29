@@ -170,7 +170,7 @@ main() {
 
     # 应用 Terraform 配置
     log_info "开始拉起代理..."
-    timeout --signal=INT ${TIMEOUT} bash -c "$(declare -f apply_terraform log_info); apply_terraform"
+    timeout ${TIMEOUT} bash -c "$(declare -f apply_terraform log_info); apply_terraform"
 
     # 防止忘记关闭代理产生不必要的费用
     log_info "稍等一下..."
