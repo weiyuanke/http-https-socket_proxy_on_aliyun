@@ -13,8 +13,8 @@ if [ "$DEPLOY_VPN" = "true" ]; then
     sudo apt-get update
     echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf
     sudo sysctl -p
+    sudo apt-get install -y iftop docker.io git-lfs
     echo "Deploying VPN server..."
-    sudo apt-get install -y iftop docker.io
     cat > vpn.env << 'EOF'
 # Define IPsec PSK, VPN username and password
 # - DO NOT put "" or '' around values, or add space around =
